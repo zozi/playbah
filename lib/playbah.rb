@@ -6,6 +6,13 @@ module Playbah
     hipchat_client[config.room_name].send(config.user_name, message)
   end
 
+  def self.capture(contents, options = {})
+    gist_options = { anonymous: true }
+    result = Gist.gist(contents, gist_options.merge(options))
+    result["html_url"]
+  end
+
+
   def self.config(&block)
     @config ||= Config.new(&block)
   end

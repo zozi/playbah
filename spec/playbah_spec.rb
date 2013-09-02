@@ -58,4 +58,17 @@ describe Playbah do
       Playbah.config.room_name.should == room_name
     end
   end
+
+  describe ".capture" do
+    let(:contents) { "contents" }
+    let(:options) { { anonymous: true } }
+
+    it 'creates an anonymous gist' do
+      gist_url = 'html_url'
+      return_hash = { "html_url" => gist_url }
+      expect(Gist).to receive(:gist).with(contents, options).and_return(return_hash)
+
+      subject.capture(contents).should == gist_url
+    end
+  end
 end

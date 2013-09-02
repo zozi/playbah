@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Playbah::VERSION
   spec.authors       = ["Adam Cooper"]
   spec.email         = ["adam.cooper@gmail.com"]
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
+  spec.description   = %q{Playball with your development env}
+  spec.summary       = %q{Send messages and logs to your teammates}
   spec.homepage      = ""
   spec.license       = "MIT"
 
@@ -22,4 +22,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake"
   spec.add_development_dependency "rspec"
   spec.add_dependency "hipchat"
+  spec.add_dependency "gist"
 end

@@ -16,6 +16,7 @@ describe Playbah do
     end
   end
   def clear_playbah
+    File.delete('./.playbah') if File.exists?('./.playbah')
     Playbah.module_eval "@config = nil"
   end
 
@@ -35,6 +36,13 @@ describe Playbah do
       expect(room).to receive(:send).with(user_name, message)
       subject.send_message(message)
     end
+
+    it "throws a PlaybahConfigError if you try and use it without configuring it" do
+      expect {
+        subject.send_message("message")
+      }.to raise_error(PlaybahConfigError)
+    end
+
   end
 
   describe ".config" do

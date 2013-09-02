@@ -1,7 +1,12 @@
 require "playbah/version"
+require 'hipchat'
+require 'gist'
+
+class PlaybahConfigError < StandardError; end
 
 module Playbah
   def self.send_message(message)
+    raise PlaybahConfigError unless config.is_set?
     hipchat_client = HipChat::Client.new(config.api_token)
     hipchat_client[config.room_name].send(config.user_name, message)
   end
@@ -40,6 +45,10 @@ module Playbah
       elsif File.exists?(file_name)
         load_from_file(file_name)
       end
+    end
+
+    def is_set?
+      true if user_name && room_name && api_token
     end
 
     def load_from_file(file_name)

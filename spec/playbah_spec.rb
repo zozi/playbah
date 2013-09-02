@@ -59,16 +59,41 @@ describe Playbah do
     end
   end
 
-  describe ".capture" do
+  describe ".capture_string" do
     let(:contents) { "contents" }
-    let(:options) { { anonymous: true } }
 
     it 'creates an anonymous gist' do
       gist_url = 'html_url'
       return_hash = { "html_url" => gist_url }
-      expect(Gist).to receive(:gist).with(contents, options).and_return(return_hash)
+      expect(Gist).to receive(:gist).with(contents, anything).and_return(return_hash)
 
-      subject.capture(contents).should == gist_url
+      subject.capture_string(contents).should == gist_url
+    end
+  end
+
+  describe ".capture_files" do
+    let(:gist_return) { { "html_url" => gist_url } }
+    let(:gist_url) { 'html_url' }
+    let(:file1_contents) { "content of file 1" }
+    let(:file2_contents) { "content of file 2" }
+
+    def create_tempfile(name, content)
+      file = Tempfile.new(name)
+      file.write(content)
+      file.close
+      file
+    end
+
+    it "uploads multiple files" do
+      file1 = create_tempfile('file1', file1_contents)
+      file2 = create_tempfile('file2', file2_contents)
+      gist_files = {
+        file1.path => file1_contents,
+        file2.path => file2_contents,
+      }
+      expect(Gist).to receive(:multi_gist).with(gist_files, anything).and_return(gist_return)
+
+      subject.capture_files([file1.path, file2.path])
     end
   end
 end

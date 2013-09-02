@@ -6,9 +6,21 @@ module Playbah
     hipchat_client[config.room_name].send(config.user_name, message)
   end
 
-  def self.capture(contents, options = {})
+  def self.capture_string(contents, options = {})
     gist_options = { anonymous: true }
     result = Gist.gist(contents, gist_options.merge(options))
+    result["html_url"]
+  end
+
+  # files is an array of filenames
+  def self.capture_files(files, options = {})
+    gist_options = { anonymous: true }
+    files_hash = files.inject({}) do |hash, file_path|
+      file = File.open(file_path, 'rb')
+      hash[file_path] = file.read
+      hash
+    end
+    result = Gist.multi_gist(files_hash, gist_options.merge(options))
     result["html_url"]
   end
 

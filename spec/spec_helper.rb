@@ -1,5 +1,6 @@
 require 'rubygems'
 require 'bundler/setup'
+require 'tempfile'
 
 require 'hipchat'
 require 'gist'

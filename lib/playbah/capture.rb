@@ -4,20 +4,20 @@ require 'digest/md5'
 
 module Playbah
   class CaptureError < StandardError; end
+  def self.capture(items, options = {})
+    # Array.wrap
+    items = if items.nil?
+      []
+    elsif items.respond_to?(:to_ary)
+      items.to_ary || [items]
+    else
+      [items]
+    end
 
-  def self.capture_string(content, options = {})
     Capture.open(anonymous: true) do |c|
-      c.add(content)
+      items.each {|item| c.add(item) }
     end
   end
-
-  # files is an array of filenames
-  def self.capture_files(files, options = {})
-    Capture.open(anonymous: true) do |c|
-      files.each {|file| c.add(file) }
-    end
-  end
-
 
   class Capture
     attr_reader :files, :defaults, :result_url

@@ -16,7 +16,6 @@ describe Playbah do
     end
   end
   def clear_playbah
-    File.delete('./.playbah') if File.exists?('./.playbah')
     Playbah.module_eval "@config = nil"
   end
 
@@ -64,28 +63,13 @@ describe Playbah do
       Playbah.config.user_name.should == user_name
       Playbah.config.api_token.should == api_token
       Playbah.config.room_name.should == room_name
+      File.delete("./.Playbah")
     end
 
   end
 
-  describe ".capture_string" do
+  describe ".capture" do
     let(:content) { "contents" }
-
-    it 'creates an anonymous gist' do
-      gist_url = 'http://gist.github.com/someting'
-      gist_content = { Digest::MD5.hexdigest(content) => content }
-      return_hash = { "html_url" => gist_url }
-
-      expect(Gist)
-       .to receive(:multi_gist)
-       .with(gist_content, anything)
-       .and_return(return_hash)
-
-      subject.capture_string(content).should == gist_url
-    end
-  end
-
-  describe ".capture_files" do
     let(:gist_return) { { "html_url" => gist_url } }
     let(:gist_url) { 'http://gist.github.com/something' }
     let(:file1_contents) { "content of file 1" }
@@ -98,7 +82,18 @@ describe Playbah do
       file
     end
 
-    it "uploads multiple files" do
+    it 'works for a string' do
+      gist_content = { Digest::MD5.hexdigest(content) => content }
+      return_hash = { "html_url" => gist_url }
+
+      expect(Gist)
+      .to receive(:multi_gist)
+      .with(gist_content, anything)
+      .and_return(return_hash)
+
+      subject.capture(content).should == gist_url
+    end
+    it "works for multiple files" do
       file1 = create_tempfile('file1', file1_contents)
       file2 = create_tempfile('file2', file2_contents)
       gist_files = {
@@ -107,7 +102,7 @@ describe Playbah do
       }
       expect(Gist).to receive(:multi_gist).with(gist_files, anything).and_return(gist_return)
 
-      subject.capture_files([file1.path, file2.path]).should == gist_url
+      subject.capture([file1.path, file2.path]).should == gist_url
     end
   end
 end

@@ -2,11 +2,10 @@ require "playbah/version"
 require 'hipchat'
 require 'gist'
 
-class PlaybahConfigError < StandardError; end
-
 module Playbah
+  class ConfigError < StandardError; end
   def self.send_message(message, options = {})
-    raise PlaybahConfigError.new("Please setup the config") unless config.is_set?
+    raise ConfigError.new("Please setup the config w/ 'playbah config'") unless config.is_set?
     hipchat_options = { message_format: 'text' }
     hipchat_client = HipChat::Client.new(config.api_token)
     hipchat_client[config.room_name].send(config.user_name, message, hipchat_options.merge(options))

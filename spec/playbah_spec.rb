@@ -40,7 +40,7 @@ describe Playbah do
     it "throws a PlaybahConfigError if you try and use it without configuring it" do
       expect {
         subject.send_message("message")
-      }.to raise_error(PlaybahConfigError)
+      }.to raise_error(Playbah::ConfigError)
     end
 
   end

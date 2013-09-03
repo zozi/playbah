@@ -69,20 +69,25 @@ describe Playbah do
   end
 
   describe ".capture_string" do
-    let(:contents) { "contents" }
+    let(:content) { "contents" }
 
     it 'creates an anonymous gist' do
-      gist_url = 'html_url'
+      gist_url = 'http://gist.github.com/someting'
+      gist_content = { Digest::MD5.hexdigest(content) => content }
       return_hash = { "html_url" => gist_url }
-      expect(Gist).to receive(:gist).with(contents, anything).and_return(return_hash)
 
-      subject.capture_string(contents).should == gist_url
+      expect(Gist)
+       .to receive(:multi_gist)
+       .with(gist_content, anything)
+       .and_return(return_hash)
+
+      subject.capture_string(content).should == gist_url
     end
   end
 
   describe ".capture_files" do
     let(:gist_return) { { "html_url" => gist_url } }
-    let(:gist_url) { 'html_url' }
+    let(:gist_url) { 'http://gist.github.com/something' }
     let(:file1_contents) { "content of file 1" }
     let(:file2_contents) { "content of file 2" }
 
@@ -102,7 +107,7 @@ describe Playbah do
       }
       expect(Gist).to receive(:multi_gist).with(gist_files, anything).and_return(gist_return)
 
-      subject.capture_files([file1.path, file2.path])
+      subject.capture_files([file1.path, file2.path]).should == gist_url
     end
   end
 end

@@ -5,10 +5,11 @@ require 'gist'
 class PlaybahConfigError < StandardError; end
 
 module Playbah
-  def self.send_message(message)
-    raise PlaybahConfigError unless config.is_set?
+  def self.send_message(message, options = {})
+    raise PlaybahConfigError.new("Please setup the config") unless config.is_set?
+    hipchat_options = { message_format: 'text' }
     hipchat_client = HipChat::Client.new(config.api_token)
-    hipchat_client[config.room_name].send(config.user_name, message)
+    hipchat_client[config.room_name].send(config.user_name, message, hipchat_options.merge(options))
   end
 
   def self.capture_string(contents, options = {})

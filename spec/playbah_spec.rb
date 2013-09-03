@@ -33,7 +33,7 @@ describe Playbah do
       room = double(:room)
       expect(HipChat::Client).to receive(:new).with(api_token).and_return(hipchat_client)
       expect(hipchat_client).to receive(:[]).with(room_name).and_return(room)
-      expect(room).to receive(:send).with(user_name, message)
+      expect(room).to receive(:send).with(user_name, message, anything)
       subject.send_message(message)
     end
 
@@ -65,6 +65,7 @@ describe Playbah do
       Playbah.config.api_token.should == api_token
       Playbah.config.room_name.should == room_name
     end
+
   end
 
   describe ".capture_string" do

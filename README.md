@@ -1,6 +1,6 @@
 # Playbah
 
-TODO: Write a gem description
+Easily be able to save output of scripts, or commands and notify your team of actions such as deploys, infrastructure changes, automated jobs.
 
 ## Installation
 
@@ -18,12 +18,12 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+```ruby
+url = Playbah.capture(file_path, "my outputstring")
+gist_url = Playbah.capture("my complete output string")
+Playbah.send_message("#{command} - completed with log: #{gist_url}")
+```
 
 ## Contributing
 
-1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
+1. Send a PR on a feature branch with nice tidy commits.
